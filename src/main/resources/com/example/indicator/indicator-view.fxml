@@ -1,6 +1,65 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.indicator.ui.ScreenView"/>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.indicator.ui.ScreenView">
+   <children>
+      <HBox fx:id="root" alignment="CENTER" prefHeight="400.0" prefWidth="600.0">
+         <children>
+            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="18.0">
+               <children>
+                  <Label text="100" />
+                  <Label text="90" />
+                  <Label text="80" />
+                  <Label text="70" />
+                  <Label text="60" />
+                  <Label text="50" />
+                  <Label text="40" />
+                  <Label text="30" />
+                  <Label text="20" />
+                  <Label text="10" />
+                  <Label text="0" />
+               </children></VBox>
+            <VBox alignment="CENTER" maxHeight="0.0" minHeight="0.0" prefHeight="0.0" prefWidth="100.0">
+               <children>
+                  <Slider fx:id="minValueSlider" showTickLabels="true" showTickMarks="true" />
+                  <Label text="Min value">
+                     <VBox.margin>
+                        <Insets bottom="20.0" />
+                     </VBox.margin>
+                  </Label>
+                  <Slider fx:id="maxValueSlider" blockIncrement="1.0" showTickLabels="true" showTickMarks="true" value="100.0" />
+                  <Label text="Max value">
+                     <VBox.margin>
+                        <Insets bottom="20.0" />
+                     </VBox.margin>
+                  </Label>
+                  <TextField fx:id="minWarningTextField" />
+                  <Label text="Min warning">
+                     <VBox.margin>
+                        <Insets bottom="20.0" />
+                     </VBox.margin>
+                  </Label>
+                  <TextField fx:id="maxWarningTextField" />
+                  <Label text="Max warning">
+                     <VBox.margin>
+                        <Insets bottom="20.0" />
+                     </VBox.margin></Label>
+                  <TextField fx:id="minBreakdownTextField" />
+                  <Label text="Min breakdown">
+                     <VBox.margin>
+                        <Insets bottom="20.0" />
+                     </VBox.margin></Label>
+                  <TextField fx:id="maxBreakdownTextField" />
+                  <Label text="Max breakdown" />
+               </children>
+               <HBox.margin>
+                  <Insets left="120.0" />
+               </HBox.margin>
+            </VBox>
+         </children>
+      </HBox>
+   </children>
+</AnchorPane>
