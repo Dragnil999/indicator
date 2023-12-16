@@ -1,79 +1,129 @@
 package com.example.indicator.ui;
 
-import com.example.indicator.presentation.IndicatorViewModel;
+import com.example.indicator.presentation.viewmodel.IndicatorViewModel;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.layout.Pane;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
-public class Indicator extends Pane {
+import java.util.List;
 
-    private static final double PREF_HEIGHT = 360.0;
+public class Indicator extends HBox {
+
+    private static final double PREF_HEIGHT = 250.0;
     private static final double PREF_WIDTH = 50.0;
-    private static final double COEFFICIENT = 3.6;
+    private static final String MAX_BREAKDOWN_LABEL = "Макс. авария";
+    private static final String MAX_WARNING_LABEL = "Макс. пред.";
+    private static final String MIN_BREAKDOWN_LABEL = "Мин. авария";
+    private static final String MIN_WARNING_LABEL = "Мин. пред.";
 
     private final IndicatorViewModel viewModel = new IndicatorViewModel();
-    private final Rectangle normalZone = new Rectangle(PREF_WIDTH, PREF_HEIGHT, Color.GREEN);
-    private final Rectangle topBreakdownZone = new Rectangle(PREF_WIDTH, 0, Color.RED);
-    private final Rectangle bottomBreakdownZone = new Rectangle(PREF_WIDTH, 0, Color.RED);
-    private final Rectangle topWarningZone = new Rectangle(PREF_WIDTH, 0, Color.YELLOW);
-    private final Rectangle bottomWarningZone = new Rectangle(PREF_WIDTH, 0, Color.YELLOW);
-    private final Rectangle topBarrier = new Rectangle(PREF_WIDTH, 0, Color.GHOSTWHITE);
-    private final Rectangle bottomBarrier = new Rectangle(PREF_WIDTH, PREF_HEIGHT + 40, Color.GHOSTWHITE);
+    private final VBox infoAboutBorders = new VBox();
+
+    private final List<Label> listOfLabels = List.of(
+            new Label(MAX_BREAKDOWN_LABEL),
+            new Label(MAX_WARNING_LABEL),
+            new Label(MIN_WARNING_LABEL),
+            new Label(MIN_BREAKDOWN_LABEL)
+    );
 
     public Indicator() {
-        VBox root = new VBox();
-        root.setLayoutY(20.0);
-        this.setPrefSize(PREF_WIDTH, PREF_HEIGHT + 40);
-        this.getChildren().addAll(root, topBarrier, bottomBarrier);
-        topBarrier.setLayoutY(20.0);
-        bottomBarrier.setLayoutY(PREF_HEIGHT + 20);
-        root.setAlignment(Pos.CENTER);
-        root.getChildren()
-                .addAll(topBreakdownZone, topWarningZone, normalZone, bottomWarningZone, bottomBreakdownZone);
+        this.setPrefSize(USE_COMPUTED_SIZE, 480);
+        this.setAlignment(Pos.CENTER);
+
+        setLabelsToVBox();
+        HBox.setMargin(infoAboutBorders, new Insets(40, 20, 0, 0));
+        this.getChildren().add(infoAboutBorders);
         setListeners();
     }
 
     private void setListeners() {
-        viewModel.maxValue.addListener(((observableValue, number, t1) -> {
-            double newHeight = PREF_HEIGHT - t1.doubleValue() * COEFFICIENT;
-            topBarrier.setHeight(newHeight);
-        }));
+        viewModel.maxWarning.addListener(((observableValue, number, t1) ->
+                listOfLabels.get(1).setText(MAX_WARNING_LABEL + " " + t1)
+        ));
 
-        viewModel.minValue.addListener(((observableValue, number, t1) -> {
-            double newHeight = PREF_HEIGHT + 20 - t1.doubleValue() * COEFFICIENT;
-            bottomBarrier.setLayoutY(newHeight);
-        }));
+        viewModel.minWarning.addListener(((observableValue, number, t1) ->
+                listOfLabels.get(2).setText(MIN_WARNING_LABEL + " " + t1))
+        );
 
-        viewModel.maxWarning.addListener(((observableValue, number, t1) -> {
-            double newHeight = t1.doubleValue() * COEFFICIENT;
-            normalZone.setHeight(calculateNormalZone() * COEFFICIENT);
-            topWarningZone.setHeight(newHeight);
-        }));
+        viewModel.maxBreakdown.addListener(((observableValue, number, t1) ->
+                listOfLabels.get(0).setText(MAX_BREAKDOWN_LABEL + " " + t1)
+        ));
 
-        viewModel.minWarning.addListener(((observableValue, number, t1) -> {
-            double newHeight = t1.doubleValue() * COEFFICIENT;
-            normalZone.setHeight(calculateNormalZone() * COEFFICIENT);
-            bottomWarningZone.setHeight(newHeight);
-        }));
-
-        viewModel.maxBreakdown.addListener(((observableValue, number, t1) -> {
-            double newHeight = t1.doubleValue() * COEFFICIENT;
-            normalZone.setHeight(calculateNormalZone() * COEFFICIENT);
-            topBreakdownZone.setHeight(newHeight);
-        }));
-
-        viewModel.minBreakdown.addListener(((observableValue, number, t1) -> {
-            double newHeight = t1.doubleValue() * COEFFICIENT;
-            normalZone.setHeight(calculateNormalZone() * COEFFICIENT);
-            bottomBreakdownZone.setHeight(newHeight);
-        }));
+        viewModel.minBreakdown.addListener(((observableValue, number, t1) ->
+                listOfLabels.get(3).setText(MIN_BREAKDOWN_LABEL + " " + t1)
+        ));
     }
 
-    private double calculateNormalZone() {
-        double scaleSize = viewModel.maxValue.get() - viewModel.minValue.get();
-        return scaleSize - viewModel.maxBreakdown.get() - viewModel.minBreakdown.get() - viewModel.maxWarning.get() - viewModel.minWarning.get();
+    public void addNewIndicator(String value) {
+        VBox indicatorContainer = new VBox();
+        indicatorContainer.setAlignment(Pos.BOTTOM_CENTER);
+
+        Rectangle indicator = new Rectangle(PREF_WIDTH, 0, Color.GREEN);
+        indicatorContainer.getChildren().add(indicator);
+        VBox.setMargin(indicator, new Insets(0, 0, 80, 10));
+
+        TextField inputField = new TextField();
+        inputField.setPrefWidth(10.0);
+        VBox.setMargin(inputField, new Insets(0, 0, 20, 0));
+
+        inputField.textProperty().addListener((observableValue, s, t1) -> {
+            double parameter = 0.0;
+            try {
+                parameter = Double.parseDouble(t1);
+            } catch (Exception exception) {
+                indicator.setHeight(parameter);
+                return;
+            }
+            if (parameter - viewModel.minValue.get() <= viewModel.maxValue.get() - viewModel.minValue.get()) {
+                indicator.setHeight(PREF_HEIGHT * (parameter - viewModel.minValue.get()) / (viewModel.maxValue.get() - viewModel.minValue.get()));
+            } else {
+                indicator.setHeight(PREF_HEIGHT);
+            }
+
+            chooseColor(parameter, indicator);
+        });
+
+        inputField.setText(value);
+
+        indicatorContainer.getChildren().add(0, inputField);
+
+        HBox.setMargin(indicatorContainer, new Insets(0, 0, 0, 10));
+        this.getChildren().add(indicatorContainer);
+    }
+
+    private void setLabelsToVBox() {
+        infoAboutBorders.setPrefSize(USE_COMPUTED_SIZE, USE_COMPUTED_SIZE);
+
+        listOfLabels.get(0).setTextFill(Color.RED);
+        listOfLabels.get(1).setTextFill(Color.GREEN);
+        listOfLabels.get(2).setTextFill(Color.GREEN);
+        listOfLabels.get(3).setTextFill(Color.RED);
+
+        listOfLabels.get(0).setPadding(new Insets(40, 0, 0, 0));
+        for (Label label : listOfLabels) {
+            VBox.setMargin(label, new Insets(0, 0, 40, 0));
+        }
+
+        infoAboutBorders.getChildren().addAll(listOfLabels);
+    }
+
+    private void chooseColor(double value, Rectangle indicator) {
+        if (value >= viewModel.maxBreakdown.get()
+                || value <= viewModel.minBreakdown.get()) {
+            indicator.setFill(Color.RED);
+        } else if (value >= viewModel.maxWarning.get()
+                || value <= viewModel.minWarning.get()) {
+            indicator.setFill(Color.YELLOW);
+        } else if (value <= viewModel.minValue.get()) {
+            indicator.setFill(Color.GHOSTWHITE);
+        } else {
+            indicator.setFill(Color.GREEN);
+        }
     }
 
     public void setMaxValue(double value) {

@@ -1,4 +1,4 @@
-package com.example.indicator.presentation;
+package com.example.indicator.presentation.viewmodel;
 
 import javafx.beans.property.SimpleDoubleProperty;
 
