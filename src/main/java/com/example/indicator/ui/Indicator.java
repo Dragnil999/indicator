@@ -10,6 +10,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Indicator extends HBox {
@@ -31,7 +32,18 @@ public class Indicator extends HBox {
             new Label(MIN_BREAKDOWN_LABEL)
     );
 
-    public Indicator() {
+    private final List<TextField> inputs = new ArrayList<>();
+    private final IndicatorCallback callback;
+
+    public interface IndicatorCallback {
+        void onMaxBreakdown(int index);
+        void onMinBreakdown(int index);
+        void onMaxWarning(int index);
+        void onMinWarning(int index);
+    }
+
+    public Indicator(IndicatorCallback callback) {
+        this.callback = callback;
         this.setPrefSize(USE_COMPUTED_SIZE, 480);
         this.setAlignment(Pos.CENTER);
 
@@ -71,6 +83,8 @@ public class Indicator extends HBox {
         inputField.setPrefWidth(10.0);
         VBox.setMargin(inputField, new Insets(0, 0, 20, 0));
 
+        inputs.add(inputField);
+
         inputField.textProperty().addListener((observableValue, s, t1) -> {
             double parameter = 0.0;
             try {
@@ -85,6 +99,7 @@ public class Indicator extends HBox {
                 indicator.setHeight(PREF_HEIGHT);
             }
 
+            handleChanges(parameter, inputs.indexOf(inputField));
             chooseColor(parameter, indicator);
         });
 
@@ -94,6 +109,10 @@ public class Indicator extends HBox {
 
         HBox.setMargin(indicatorContainer, new Insets(0, 0, 0, 10));
         this.getChildren().add(indicatorContainer);
+    }
+
+    public void setValueToIndicatorByIndex(int index, String value) {
+        inputs.get(index).setText(value);
     }
 
     private void setLabelsToVBox() {
@@ -110,6 +129,18 @@ public class Indicator extends HBox {
         }
 
         infoAboutBorders.getChildren().addAll(listOfLabels);
+    }
+
+    private void handleChanges(double value, int index) {
+        if (value >= viewModel.maxBreakdown.get()) {
+            callback.onMaxBreakdown(index);
+        } else if (value <= viewModel.minBreakdown.get()) {
+            callback.onMinBreakdown(index);
+        } else if (value >= viewModel.maxWarning.get()) {
+            callback.onMaxWarning(index);
+        } else if (value <= viewModel.minWarning.get()) {
+            callback.onMinWarning(index);
+        }
     }
 
     private void chooseColor(double value, Rectangle indicator) {

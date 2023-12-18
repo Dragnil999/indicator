@@ -4,14 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="52d84cf7-f82d-4439-b0d7-63945c6780b2" name="Changes" comment="Лабораторная готова">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/indicator/presentation/ScreenState.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/indicator/presentation/viewmodel/ScreenViewModel.java" afterDir="false" />
+    <list default="true" id="52d84cf7-f82d-4439-b0d7-63945c6780b2" name="Changes" comment="Переделанная работа">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/indicator/presentation/IndicatorViewModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/indicator/presentation/viewmodel/IndicatorViewModel.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/indicator/ui/Indicator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/indicator/ui/Indicator.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/indicator/ui/ScreenView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/indicator/ui/ScreenView.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/com/example/indicator/indicator-view.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/example/indicator/indicator-view.fxml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -42,15 +38,15 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/danil/IdeaProjects/indicator&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "ignore.virus.scanning.warn.message": "true",
+    "last_opened_file_path": "C:/Users/danil/IdeaProjects/converter"
   }
-}</component>
+}]]></component>
   <component name="RunManager">
     <configuration name="Indicator" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="com.example.indicator.IndicatorApplication" />
@@ -85,7 +81,15 @@
       <option name="project" value="LOCAL" />
       <updated>1701773025158</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Переделанная работа">
+      <option name="closed" value="true" />
+      <created>1702726071396</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1702726071396</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -102,6 +106,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Initial commit" />
     <MESSAGE value="Лабораторная готова" />
-    <option name="LAST_COMMIT_MESSAGE" value="Лабораторная готова" />
+    <MESSAGE value="Переделанная работа" />
+    <option name="LAST_COMMIT_MESSAGE" value="Переделанная работа" />
   </component>
 </project>

@@ -1,6 +1,7 @@
 package com.example.indicator.ui;
 
 import com.example.indicator.presentation.viewmodel.ScreenViewModel;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -50,11 +51,33 @@ public class ScreenView implements Initializable {
 
     private Indicator indicator;
 
+    private final Indicator.IndicatorCallback callback = new Indicator.IndicatorCallback() {
+        @Override
+        public void onMaxBreakdown(int index) {
+            System.out.println("Max breakdown reached on indicator " + (index + 1));
+        }
+
+        @Override
+        public void onMinBreakdown(int index) {
+            System.out.println("Min breakdown reached on indicator " + (index + 1));
+        }
+
+        @Override
+        public void onMaxWarning(int index) {
+            System.out.println("Max warning reached on indicator " + (index + 1));
+        }
+
+        @Override
+        public void onMinWarning(int index) {
+            System.out.println("Min warnings reached on indicator " + (index + 1));
+        }
+    };
+
     private final ScreenViewModel viewModel = new ScreenViewModel();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        indicator = new Indicator();
+        indicator = new Indicator(callback);
         root.getChildren().add(0, indicator);
         setListeners();
         handleState();
@@ -124,6 +147,9 @@ public class ScreenView implements Initializable {
         parametersVBox.setManaged(false);
         inputVBox.setManaged(false);
         indicateButton.setVisible(false);
+
+        Thread thread = getThread();
+        thread.start();
     }
 
     public void addIndicators() {
@@ -144,5 +170,25 @@ public class ScreenView implements Initializable {
         } catch (Exception ignored) {
         }
         return value;
+    }
+
+    @SuppressWarnings("rawtypes")
+    private Thread getThread() {
+        Task task = new Task() {
+            @Override
+            protected Object call() {
+                for (double i = 0; i < 360; i += 0.1) {
+                    indicator.setValueToIndicatorByIndex(0, String.valueOf(Math.sin(i)));
+                    try {
+                        Thread.sleep(150);
+                    } catch (Exception ignored) {
+                    }
+                }
+                return null;
+            }
+        };
+        Thread thread = new Thread(task);
+        thread.setDaemon(true);
+        return thread;
     }
 }
